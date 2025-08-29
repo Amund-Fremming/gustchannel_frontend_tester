@@ -13,7 +13,7 @@
   pointer-events: none;
 }
 
-.wrapper {
+.client {
   display: flex;
   flex-direction: column;
 }

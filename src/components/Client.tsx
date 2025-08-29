@@ -3,9 +3,10 @@ import { conduit } from "../rust/Conduit";
 
 interface ClientProps {
     name: string
+    hub: string
 }
 
-export function Client({ name }: ClientProps) {
+export function Client({ name, hub }: ClientProps) {
     const [messages, setMessages] = useState<string[]>([]);
     const [room, setRoom] = useState<string>("");
     const [status, setStatus] = useState<string>("not connected");
@@ -19,11 +20,12 @@ export function Client({ name }: ClientProps) {
     const handleConnect = () => {
         setStatus(`connected:${room}`)
 
-        const url = "localhost:3001/ws";
+        const url = `localhost:3001/${hub}`;
         conduit.connect(url);
 
         conduit.onReceive((message: string) => {
             console.log(message);
+            setMessages(prev => [...prev, "pong"])
         });
     }
 
@@ -37,7 +39,8 @@ export function Client({ name }: ClientProps) {
     };
 
     return (
-        <div className="wrapper">
+        <div className="client">
+            <p>[{hub}]</p>
             <p>({status})</p>
             <h2>{name}</h2>
             <button onClick={handleConnect}>Connect</button>
