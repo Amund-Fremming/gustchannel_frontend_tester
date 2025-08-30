@@ -1,10 +1,21 @@
 import { Payload } from "./types";
 
-class Conduit {
+export class Conduit {
     connection: WebSocket | null;
 
     constructor() {
         this.connection = null;
+        console.info("Conduit created");
+    }
+
+    isConnected(): boolean {
+        if (this.connection == null) {
+            return false;
+        }
+
+        return true;
+
+        return this.connection?.readyState !== WebSocket.OPEN;
     }
 
     connect(url: string, onOpen?: () => void) {
@@ -17,17 +28,18 @@ class Conduit {
 
         this.connection.onerror = () => {
             console.error("WebSocket error");
+            this.connection = null;
         }
 
         this.connection.onclose = () => {
             console.log("WebSocket closed");
+            this.connection = null;
         };
     }
 
     disconnect() {
         this.connection?.close();
         this.connection = null;
-
     }
 
     invoke<Primitive>(function_name: string, ...params: Primitive[]) {
@@ -57,5 +69,3 @@ class Conduit {
         };
     }
 }
-
-export const conduit = new Conduit();
