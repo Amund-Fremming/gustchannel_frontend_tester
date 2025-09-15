@@ -45,7 +45,7 @@ export function Client({ name, hub }: ClientProps) {
     }
 
     const sendMessage = () => {
-        conduit.invoke("greet", 1, 2, 3);
+        conduit.invoke("g2", 1, 2, 3);
     };
 
     return (
